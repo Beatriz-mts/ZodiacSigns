@@ -1,0 +1,15 @@
+<!-- templates/zodiac_sign_list.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Zodiac Signs</title>
+</head>
+<body>
+    <h1>Famous peoples with Scorpio as their solar zodiac sign:</h1>
+    <ul>
+        {% for sign_scorpio in signs_scorpio %}
+            <li>{{ sign_scorpio.name }}</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

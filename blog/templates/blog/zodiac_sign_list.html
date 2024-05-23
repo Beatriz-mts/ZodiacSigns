@@ -1,0 +1,53 @@
+<!-- templates/zodiac_sign_list.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Zodiac Signs</title>
+</head>
+<body>
+    <h1>Zodiac Signs</h1>
+<!--    <ul>-->
+<!--        {% for zodiac_sign in zodiac_signs %}-->
+<!--            <li>{{ zodiac_sign.name }}</li>-->
+<!--        {% endfor %}-->
+<!--    </ul>-->
+    <ul>
+        <li>
+            <a href="{% url 'aries_list' %}">Aries</a>
+        </li>
+        <li>
+            <a href="{% url 'taurus_list' %}">Taurus</a>
+        </li>
+        <li>
+            <a href="{% url 'gemini_list' %}">Gemini</a>
+        </li>
+        <li>
+            <a href="{% url 'cancer_list' %}">Cancer</a>
+        </li>
+        <li>
+            <a href="{% url 'leo_list' %}">Leo</a>
+        </li>
+        <li>
+            <a href="{% url 'virgo_list' %}">Virgo</a>
+        </li>
+        <li>
+            <a href="{% url 'libra_list' %}">Libra</a>
+        </li>
+        <li>
+            <a href="{% url 'scorpio_list' %}">Scorpio</a>
+        </li>
+        <li>
+            <a href="{% url 'sagittarius_list' %}">Sagittarius</a>
+        </li>
+        <li>
+            <a href="{% url 'capricorn_list' %}">Capricorn</a>
+        </li>
+        <li>
+            <a href="{% url 'aquarius_list' %}">Aquarius</a>
+        </li>
+        <li>
+            <a href="{% url 'pisces_list' %}">Pisces</a>
+        </li>
+    </ul>
+</body>
+</html>

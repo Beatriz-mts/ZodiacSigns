@@ -1,0 +1,15 @@
+<!-- templates/zodiac_sign_list.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Zodiac Signs</title>
+</head>
+<body>
+    <h1>Famous peoples with Sagittarius as their solar zodiac sign:</h1>
+    <ul>
+        {% for sign_sagittarius in signs_sagittarius %}
+            <li>{{ sign_sagittarius.name }}</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
