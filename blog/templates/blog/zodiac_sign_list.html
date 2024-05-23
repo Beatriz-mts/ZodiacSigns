@@ -1,11 +1,16 @@
-<!-- templates/zodiac_sign_list.html -->
-<!DOCTYPE html>
+{% load static %}
 <html>
 <head>
     <title>Zodiac Signs</title>
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+    <link href="//fonts.googleapis.com/css?family=Lobster&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="{% static 'css/blog.css' %}">
 </head>
 <body>
-    <h1>Zodiac Signs</h1>
+    <div class="page-header">
+        <h1>Zodiac Signs</h1>
+    </div>
 <!--    <ul>-->
 <!--        {% for zodiac_sign in zodiac_signs %}-->
 <!--            <li>{{ zodiac_sign.name }}</li>-->
