@@ -1,0 +1,25 @@
+{% extends "blog/base.html" %}
+
+{% block content %}
+<a href="{% url 'zodiac_sign_list' %}" class="btn btn-primary btn-sm me-3">List artists</a>
+
+  <table class="table table-striped">
+    <tr>
+      <th class="font-monospace">Name</th>
+      <th class="font-monospace">Sign</th>
+      <th class="font-monospace">Birth date</th>
+      <th class="font-monospace">Profession</th>
+
+    </tr>
+      {% for sign in get_zodiac_sign %}
+    <tr>
+      <td class="font-monospace"><a href="{% url 'get_famous_person' sign.person_id %}">{{ sign.name }}</a></td>
+      <td>{{ sign.zodiac_sign.name }}</td>
+      <td>{{ sign.birth_date }}</td>
+      <td>{{ sign.profession.name }}</td>
+    </tr>
+      {% endfor %}
+  </table>
+
+{% endblock %}
+

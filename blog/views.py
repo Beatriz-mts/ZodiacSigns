@@ -1,81 +1,61 @@
-from django.shortcuts import render
-from .models import ZodiacSign, FamousPerson
+from django.shortcuts import render, redirect
+from django.urls import reverse
+
+from .models import ZodiacSign, FamousPerson, Professions
+from .forms import FamousPersonForm
+from .services import get_zodiac_sign_from_birthdate
 
 
 def zodiac_sign_list(request):
-    # Query the ZodiacSign model and order by the first letter of the name
-    zodiac_signs = ZodiacSign.objects.all().order_by('name')
-    return render(request, 'blog/zodiac_sign_list.html', {'zodiac_signs': zodiac_signs})
+    # context = {"zodiac_sign_list": ZodiacSign.objects.all}
+    # return render(request, "blog/zodiac_sign_list.html", context)
+    zodiac_signs = ZodiacSign.objects.all()
+    context = {"zodiac_sign_list": zodiac_signs}
+    return render(request, "blog/zodiac_sign_list.html", context)
 
 
-def aries_list(request):
-    # Query the FamousPerson model and order by the ones that have Aries as solar zodiac sign by the sign_id
-    signs_aries = FamousPerson.objects.filter(zodiac_sign=1)
-    return render(request, 'blog/aries_list.html', {'signs_aries': signs_aries})
+def get_zodiac_sign(request, pk):
+    context = {"get_zodiac_sign": FamousPerson.objects.filter(zodiac_sign=pk)}
+    return render(request, 'blog/get_zodiac_sign.html', context)
 
 
-def taurus_list(request):
-    # Query the FamousPerson model and order by the ones that have Taurus as solar zodiac sign by the sign_id
-    signs_taurus = FamousPerson.objects.filter(zodiac_sign=2)
-    return render(request, 'blog/taurus_list.html', {'signs_taurus': signs_taurus})
+def create_new_famous_person(request):
+    if request.method == 'POST':
+        form = FamousPersonForm(request.POST)
+        if form.is_valid():
+            # Salva a instância do form, mas não commita ao banco ainda
+            new_person = form.save(commit=False)
+
+            # Obtém o signo do zodíaco baseado na data de nascimento
+            birth_date = form.cleaned_data["birth_date"]
+            zodiac_sign = get_zodiac_sign_from_birthdate(birth_date)
+
+            # Atribui o signo do zodíaco à nova pessoa
+            new_person.zodiac_sign = zodiac_sign
+
+            # Salva a nova pessoa com todos os dados
+            new_person.save()
+
+            # Redireciona para a visualização do signo do zodíaco
+            return redirect(reverse("get_zodiac_sign", kwargs={"pk": new_person.zodiac_sign.pk}))
+        else:
+            return render(request, 'blog/create_new_famous_person.html', context={"form": form, "errors": form.errors})
+    else:
+        form = FamousPersonForm()
+    return render(request, 'blog/create_new_famous_person.html', context={"form": form})
 
 
-def gemini_list(request):
-    # Query the FamousPerson model and order by the ones that have Gemini as solar zodiac sign by the sign_id
-    signs_gemini = FamousPerson.objects.filter(zodiac_sign=3)
-    return render(request, 'blog/gemini_list.html', {'signs_gemini': signs_gemini})
+def get_famous_person(request, pk):
+    context = {"get_famous_person": FamousPerson.objects.get(person_id=pk)}
+    return render(request, 'blog/delete_or_update_famous_person.html', context)
 
 
-def cancer_list(request):
-    # Query the FamousPerson model and order by the ones that have Cancer as solar zodiac sign by the sign_id
-    signs_cancer = FamousPerson.objects.filter(zodiac_sign=4)
-    return render(request, 'blog/cancer_list.html', {'signs_cancer': signs_cancer})
+def delete_famous_person(_, pk):
+    FamousPerson.objects.filter(person_id=pk).delete()
+    return redirect(reverse("zodiac_sign_list"))
 
 
-def leo_list(request):
-    # Query the FamousPerson model and order by the ones that have Leo as solar zodiac sign by the sign_id
-    signs_leo = FamousPerson.objects.filter(zodiac_sign=5)
-    return render(request, 'blog/leo_list.html', {'signs_leo': signs_leo})
-
-
-def virgo_list(request):
-    # Query the FamousPerson model and order by the ones that have Virgo as solar zodiac sign by the sign_id
-    signs_virgo = FamousPerson.objects.filter(zodiac_sign=6)
-    return render(request, 'blog/virgo_list.html', {'signs_virgo': signs_virgo})
-
-
-def libra_list(request):
-    # Query the FamousPerson model and order by the ones that have Libra as solar zodiac sign by the sign_id
-    signs_libra = FamousPerson.objects.filter(zodiac_sign=7)
-    return render(request, 'blog/libra_list.html', {'signs_libra': signs_libra})
-
-
-def scorpio_list(request):
-    # Query the FamousPerson model and order by the ones that have Scorpio as solar zodiac sign by the sign_id
-    signs_scorpio = FamousPerson.objects.filter(zodiac_sign=8)
-    return render(request, 'blog/scorpio_list.html', {'signs_scorpio': signs_scorpio})
-
-
-def sagittarius_list(request):
-    # Query the FamousPerson model and order by the ones that have Sagittarius as solar zodiac sign by the sign_id
-    signs_sagittarius = FamousPerson.objects.filter(zodiac_sign=9)
-    return render(request, 'blog/sagittarius_list.html', {'signs_sagittarius': signs_sagittarius})
-
-
-def capricorn_list(request):
-    # Query the FamousPerson model and order by the ones that have Capricorn as solar zodiac sign by the sign_id
-    signs_capricorn = FamousPerson.objects.filter(zodiac_sign=10)
-    return render(request, 'blog/capricorn_list.html', {'signs_capricorn': signs_capricorn})
-
-
-def aquarius_list(request):
-    # Query the FamousPerson model and order by the ones that have Aquarius as solar zodiac sign by the sign_id
-    signs_aquarius = FamousPerson.objects.filter(zodiac_sign=11)
-    return render(request, 'blog/aquarius_list.html', {'signs_aquarius': signs_aquarius})
-
-
-def pisces_list(request):
-    # Query the FamousPerson model and order by the ones that have Pisces as solar zodiac sign by the sign_id
-    signs_pisces = FamousPerson.objects.filter(zodiac_sign=12)
-    return render(request, 'blog/pisces_list.html', {'signs_pisces': signs_pisces})
+def update_famous_person(request, pk):
+    FamousPerson.objects.filter(person_id=pk).update(name=request.POST["name"])
+    return redirect(reverse("get_zodiac_sign", kwargs={"pk": pk}))
 
